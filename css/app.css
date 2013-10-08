@@ -1,5 +1,6 @@
 /* app css stylesheet */
 
+
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -37,20 +38,163 @@ div.overview {
   max-width: 400px;
 }
 
-div.port_box {
-  padding: 9px;
+
+.container-non-responsive {
+    border: 1px solid #e1e1e8;
+    border-radius: 4px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 840px;
+}
+
+#overlay {
+position: absolute;
+}
+
+.box {
+  text-align: center;
+  position: absolute;
+  padding: 4px;
   border: 1px solid #e1e1e8;
   border-radius: 4px;
   background-color: #f7f7f9;
+  z-index: 10;
 }
 
-.container-non-responsive {
-  /* Margin/padding copied from Bootstrap */
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+#top-left {
+    width: 210px;
+    height: 70px;
+    left: 0px;
+    top: 0px;
+}
 
-  /* Set width to your desired site width */
-  width: 1170px;
+#top-right {
+    width: 210px;
+    height: 70px;
+    top: 0px;
+    left: 630px;
+}
+
+#name {
+    width: 280px;
+    height: 70px; 
+    left: 280px;
+    top: 70px;
+}
+
+#resume {
+    width: 140px;
+    height: 70px;
+    left: 70px;
+    top: 150px;
+}
+
+#contact {
+    width: 140px;
+    height: 70px;
+    left: 630px;
+    top: 150px;
+    font-size: 12px;
+}
+
+#aboutme {
+    width: 280px;
+    height: 140px;
+    left: 280px;
+    top: 210px;
+}
+
+
+#port1 {
+    width: 140px;
+    height: 70px;
+    left: 70px;
+    top: 280px;
+}
+
+#port2 {
+    width: 140px;
+    height: 70px;
+    left: 70px;
+    top: 420px;
+}
+
+#port3 {
+    width: 140px;
+    height: 140px;
+    left: 70px;
+    top: 560px;
+}
+
+#port4 {
+    width: 140px;
+    height: 140px;
+    left: 630px;
+    top: 560px;
+}
+
+#port5 {
+    width: 140px;
+    height: 70px;
+    left: 630px;
+    top: 420px;
+}
+
+#port6 {
+    width: 140px;
+    height: 70px;
+    left: 630px;
+    top: 280px;
+}
+
+#oss {
+    width: 280px;
+    left: 280px;
+    top: 630px;
+    height: 70px;
+}
+
+#howto {
+    width: 280px;
+    left: 280px;
+    top: 420px;
+    height: 140px;
+}
+
+#search {
+    width: 210px;
+    left: 140px;
+    top: 770px;
+    height: 70px;
+}
+
+#tech {
+    width: 210px;
+    left: 490px;
+    top: 770px;
+    height: 70px;
+}
+
+#spacer1 {
+    width: 70px;
+    left: 0px;
+    top: 770px;
+    height: 70px;
+}
+
+#spacer2 {
+    width: 70px;
+    left: 770px;
+    top: 770px;
+    height: 70px;
+}
+
+
+#pacman {
+    position: absolute;
+    z-index: 0;
+    tabindex = 1;
 }

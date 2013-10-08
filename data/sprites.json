@@ -1,0 +1,33 @@
+{
+  "player": {
+    "sx": 0,
+    "sy": 0,
+    "cols": 1,
+    "tilew": 70,
+    "tileh": 70,
+    "frames": 1
+  },
+  "enemy": {
+    "sx": 0,
+    "sy": 70,
+    "cols": 1,
+    "tilew": 70,
+    "tileh": 70,
+    "frames": 1
+  },
+  "tower": {
+    "sx": 0,
+    "sy": 140,
+    "cols": 1,
+    "tilew": 70,
+    "tileh": 70,
+    "frames": 1
+  },
+  "dot": {
+    "sx": 0,
+    "sy": 210,
+    "cols": 1,
+    "tilew": 70,
+    "tileh": 70
+  }
+}
