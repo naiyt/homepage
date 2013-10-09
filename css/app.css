@@ -55,12 +55,13 @@ position: absolute;
 }
 
 .box {
+  color: #fff;
   text-align: center;
   position: absolute;
   padding: 4px;
-  border: 1px solid #e1e1e8;
+  border: 1px solid #367ebd;
   border-radius: 4px;
-  background-color: #f7f7f9;
+  background-color: #428bca;
   z-index: 10;
 }
 
@@ -89,14 +90,14 @@ position: absolute;
     width: 140px;
     height: 70px;
     left: 70px;
-    top: 150px;
+    top: 140px;
 }
 
 #contact {
     width: 140px;
     height: 70px;
     left: 630px;
-    top: 150px;
+    top: 140px;
     font-size: 12px;
 }
 
@@ -195,6 +196,4 @@ position: absolute;
 
 #pacman {
     position: absolute;
-    z-index: 0;
-    tabindex = 1;
 }

@@ -1,11 +1,13 @@
-
     // 1. Wait for the onload even
     window.addEventListener("load",function() {
-        
+
+      var top_left = $('#top-left');
+      var canvas = $('#pacman');
+
       // Set up a basic Quintus object
       // with the necessary modules and controls
       var Q = window.Q = Quintus({ development: true })
-              .include("Sprites, Scenes, Input, 2D")
+              .include("Sprites, Scenes, Input, 2D, Anim")
               .setup('pacman',{width: 840, height: 840})
               .controls(true)
 
@@ -22,7 +24,44 @@
       var SPRITE_ENEMY = 4;
       var SPRITE_DOT = 8;
 
-      Q.component("towerManControls", {
+
+      /* Warning! All hands on deck! Nasty hack sighted! This is a red alert, repeat, red alert!
+         (There's some issues with the bounds on the edges of the maps. This is basically a custom collision
+          detection routine for the outermost walls.)*/
+      function check_for_bounds(p) {
+        if(p.x >= 840-35) {
+            p.x = 840-35;
+            p.vx = 0;
+        }
+        else if(p.x <= 35) {
+            p.x = 35;
+            p.vx = 0;
+        }
+        else if(p.y >= 840-35) {
+            p.y = 840-35;
+            p.vy = 0;
+        }
+        else if(p.y <= 35) {
+            p.y = 35;
+            p.vy = 0;
+        }
+      }
+
+      function rotate(p) {
+          // rotate the player
+          // based on our velocity
+          if(p.vx > 0) {
+            p.angle = 0;
+          } else if(p.vx < 0) {
+            p.angle = 180;
+          } else if(p.vy > 0) {
+            p.angle = 90;
+          } else if(p.vy < 0) {
+            p.angle = -90;
+          }
+     }
+
+      Q.component("pacManControls", {
         // default properties to add onto our entity
         defaults: { speed: 500, direction: 'up' },
 
@@ -30,6 +69,8 @@
         // an entity
         added: function() {
           var p = this.entity.p;
+          this.time_elapsed = 0;
+          this.time_to_ai = 20; // Seconds before AI kicks in
 
           // add in our default properties
           Q._defaults(p,this.defaults);
@@ -44,24 +85,24 @@
           // for easy reference
           var p = this.entity.p;
 
-          // rotate the player
-          // based on our velocity
-          if(p.vx > 0) {
-            p.angle = 90;
-          } else if(p.vx < 0) {
-            p.angle = -90;
-          } else if(p.vy > 0) {
-            p.angle = 180;
-          } else if(p.vy < 0) {
-            p.angle = 0;
+          this.time_elapsed += dt;
+
+          if(this.time_elapsed >= this.time_to_ai || Q.inputs['fire']) {
+            p.playing = false;
+            p.switched = true;
+            this.time_elapsed = 0;
           }
 
+          p.prev_direction = p.direction;
           // grab a direction from the input
           p.direction = Q.inputs['left']  ? 'left' :
                         Q.inputs['right'] ? 'right' :
                         Q.inputs['up']    ? 'up' :
                         Q.inputs['down']  ? 'down' : p.direction;
 
+         
+          check_for_bounds(p);
+          rotate(p);
           // based on our direction, try to add velocity
           // in that direction
           switch(p.direction) {
@@ -71,7 +112,7 @@
             case "down": p.vy = p.speed; break;
           }
 
-          if(p.x < 30) {
+          /*if(p.x < 30) {
             p.x = 30;
           }
           else if(p.x > 800) {
@@ -82,7 +123,7 @@
           }
           else if(p.y > 800) {
             p.y = 800;
-          }
+          }*/
         }
 
       });
@@ -92,14 +133,42 @@
         init: function(p) {
 
           this._super(p,{
+            sprite:"player",
             sheet:"player",
             type: SPRITE_PLAYER,
-            collisionMask: SPRITE_TILES | SPRITE_ENEMY | SPRITE_DOT
+            collisionMask: SPRITE_TILES | SPRITE_ENEMY | SPRITE_DOT,
+            playing: false,
+            switched: false
           });
-          this.add("2d, towerManControls");
+          this.add("2d");
+          this.add("animation");
+          if (this.p.playing) {
+              this.add("pacManControls");
+          }
+          else {
+               this.add("pacmanAI");
+          }
+        },
+        step: function(dt) {
+            if(this.p.playing && this.p.switched) {
+                console.log("Switching to player control...");
+                this.del("pacmanAI");
+                this.add("pacManControls");
+                this.p.switched = false;
+            }
+            else if(this.p.switched) {
+                console.log("Switching to AI control...");            
+                this.del("pacManControls");
+                this.add("pacmanAI");
+                this.p.switched = false;
+            }
         }
       });
 
+        Q.animations('player', {
+          eating: { frames: [0,1], rate: 1/3},
+       });
+   
 
       // Create the Dot sprite
       Q.Sprite.extend("Dot", {
@@ -142,7 +211,7 @@
       Q.Dot.extend("Tower", {
         init: function(p) {
           this._super(Q._defaults(p,{
-            sheet: 'tower'
+            sheet: 'pacman'
           }));
         }
       });
@@ -154,7 +223,7 @@
         return { x: col*tileSize + tileSize/2, y: row*tileSize + tileSize/2 };
       }
 
-      Q.TileLayer.extend("TowerManMap",{
+      Q.TileLayer.extend("PacManMap",{
         init: function() {
           this._super({
             type: SPRITE_TILES,
@@ -200,11 +269,65 @@
 
         step: function(dt) {
           var p = this.entity.p;
-
+          check_for_bounds(p);
           if(Math.random() < p.switchPercent / 100) {
             this.tryDirection();
           }
 
+          switch(p.direction) {
+            case "left": p.vx = -p.speed; break;
+            case "right":p.vx = p.speed; break;
+            case "up":   p.vy = -p.speed; break;
+            case "down": p.vy = p.speed; break;
+          }
+        },
+
+        tryDirection: function() {
+          var p = this.entity.p; 
+          var from = p.direction;
+          if(p.vy != 0 && p.vx == 0) {
+            p.direction = Math.random() < 0.5 ? 'left' : 'right';
+          } else if(p.vx != 0 && p.vy == 0) {
+            p.direction = Math.random() < 0.5 ? 'up' : 'down';
+          }
+        },
+
+        changeDirection: function(collision) {
+          var p = this.entity.p;
+          if(p.vx == 0 && p.vy == 0) {
+            if(collision.normalY) {
+              p.direction = Math.random() < 0.5 ? 'left' : 'right';
+            } else if(collision.normalX) {
+              p.direction = Math.random() < 0.5 ? 'up' : 'down';
+            }
+          }
+        }
+      });
+
+      Q.component("pacmanAI", {
+        defaults: { speed: 200, direction: 'left', switchPercent: 2 },
+
+        added: function() {
+          var p = this.entity.p;
+
+          Q._defaults(p,this.defaults);
+          this.entity.on("step",this,"step");
+          this.entity.on('hit',this,"changeDirection");
+        },
+
+        step: function(dt) {
+          if(Q.inputs['left'] || Q.inputs['right'] || Q.inputs['up'] || Q.inputs['down']) {
+             this.entity.p.playing = true;
+             this.entity.p.switched = true;
+          } 
+
+          var p = this.entity.p;
+          check_for_bounds(p);
+          rotate(p);
+
+          if(Math.random() < p.switchPercent / 100) {
+            this.tryDirection();
+          }
           switch(p.direction) {
             case "left": p.vx = -p.speed; break;
             case "right":p.vx = p.speed; break;
@@ -256,19 +379,22 @@
       });
 
       Q.scene("level1",function(stage) {
-        var map = stage.collisionLayer(new Q.TowerManMap());
+        var map = stage.collisionLayer(new Q.PacManMap());
         map.setup();
 
-        stage.insert(new Q.Player(Q.tilePos(10,7)));
+        player = new Q.Player(Q.tilePos(10,7));
+        player.play("eating");
+        stage.insert(player);
 
         stage.insert(new Q.Enemy(Q.tilePos(10,4)));
         stage.insert(new Q.Enemy(Q.tilePos(15,10)));
         stage.insert(new Q.Enemy(Q.tilePos(5,10)));
       });
 
-      Q.load("sprites.png, sprites.json, level.json, tiles.png", function() {
+      Q.load("sprites.png, sprites.json, level.json, tiles.png, Pacman.png", function() {
         Q.sheet("tiles","tiles.png", { tileW: 70, tileH: 70 });
-
+        Q.sheet("player","Pacman.png", {tileW: 70, tileH: 70});
+        
         Q.compileSheets("sprites.png","sprites.json");
         Q.stageScene("level1");
       });
