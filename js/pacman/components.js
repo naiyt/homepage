@@ -2,19 +2,19 @@
    (There's some issues with the bounds on the edges of the maps. This is basically a custom collision
     detection routine for the outermost walls.)*/
 function check_for_bounds(p) {
-  if(p.x >= 840-35) {
+  if(p.x >= 840-30) {
       p.x = 840-35;
       p.vx = 0;
   }
-  else if(p.x <= 35) {
+  else if(p.x <= 30) {
       p.x = 35;
       p.vx = 0;
   }
-  else if(p.y >= 840-35) {
+  else if(p.y >= 840-30) {
       p.y = 840-35;
       p.vy = 0;
   }
-  else if(p.y <= 35) {
+  else if(p.y <= 30) {
       p.y = 35;
       p.vy = 0;
   }
@@ -34,7 +34,7 @@ function rotate(p) {
     }
 }
 
-var default_speed = 500;
+var default_speed = 1000;
 
 Q.component("pacManControls", {
   defaults: { speed: default_speed, direction: 'up' },
@@ -82,6 +82,7 @@ Q.component("pacManControls", {
       case "up":   p.vy = -p.speed; break;
       case "down": p.vy = p.speed; break;
     }
+
 
    }
 
@@ -138,56 +139,112 @@ Q.component("enemyControls", {
 });
 
 
-Q.component("pacmanAI", {
-  defaults: { speed: default_speed, direction: 'left', switchPercent: 2 },
+
+Q.component('pacmanAI', {
+  defaults: {
+    speed: default_speed,
+    searching: true,
+    direct: [], // Directions to next dot
+    curr_direction: 'right',
+    location: [7,8],
+    stuck: 0,
+    search_wait: .25, // Wait a brief moment before re-searching, so we don't immediately change direction
+                      // before actually gobbling a tasty dot
+    search_time: .25
+  },
 
   added: function() {
     var p = this.entity.p;
-
     Q._defaults(p,this.defaults);
-    this.entity.on("step",this,"step");
-    this.entity.on('hit',this,"changeDirection");
+    this.entity.on('step',this,'step');
   },
 
   step: function(dt) {
-    if(Q.inputs['left'] || Q.inputs['right'] || Q.inputs['up'] || Q.inputs['down']) {
-       this.entity.p.playing = true;
-       this.entity.p.switched = true;
-    } 
-
     var p = this.entity.p;
+
+    // If an arrow key is pressed, remove the ai and allow filthy humans to play
+    if(Q.inputs['left'] || Q.inputs['right'] || Q.inputs['up'] || Q.inputs['down']) {
+       p.playing = true;
+       p.switched = true;
+       p.searching = true;
+       p.search_time = p.search_wait;
+       return;
+    }
+
     check_for_bounds(p);
     rotate(p);
 
-    if(Math.random() < p.switchPercent / 100) {
-      this.tryDirection();
+    var coord = Q.colAndRow(p.x, p.y);
+
+    // Time to search for the next dot; get a random dot and get the path to it
+    if(p.searching && p.search_time >= p.search_wait) {
+      dot = next_dot(Q.currMap);
+      p.direct = pathfind([coord.row,coord.col],dot,Q.currMap);
+      p.searching = false;
+      p.search_time = 0;
     }
-    switch(p.direction) {
+
+    if(p.direct.length === 0) { // Out of directions! What ever shall we do.
+      p.search_time += dt;
+      p.searching = true;
+    }
+    else {
+      var next = p.direct[p.direct.length-1];
+      coord = [coord.row,coord.col];
+
+      // We're on the correct grid; get the next direction
+      if((coord[0] == next['coord'][0] && coord[1] == next['coord'][1])) {
+        p.curr_direction = p.direct.pop()['dir'];
+      }
+
+      this.changeDirection(p.curr_direction);
+
+      // Keep track of how many times we've been on the same grid
+      if(coord[0] == p.location[0] && coord[1] == p.location[1]) {
+        p.stuck += 1;
+      } else {
+        p.stuck = 0;
+      }
+      // .. and, if we've been on it too long, search for a new dot.
+      // Otherwise Mr. PacMan will occasionally get stuck in a corner or something
+      if(p.stuck >= 10) {
+        console.log(p.stuck);
+        p.searching = true;
+        p.search_time = p.search_wait;
+        p.stuck = 0;
+      }
+
+      // To keep track of our last location
+      p.location = coord;
+    }
+    
+  },
+
+  changeDirection: function(direction) {
+    var p = this.entity.p;
+    switch(direction) {
       case "left": p.vx = -p.speed; break;
       case "right":p.vx = p.speed; break;
-      case "up":   p.vy = -p.speed; break;
+      case "up": p.vy = -p.speed; break;
       case "down": p.vy = p.speed; break;
     }
-  },
 
-  tryDirection: function() {
-    var p = this.entity.p; 
-    var from = p.direction;
-    if(p.vy != 0 && p.vx == 0) {
-      p.direction = Math.random() < 0.5 ? 'left' : 'right';
-    } else if(p.vx != 0 && p.vy == 0) {
-      p.direction = Math.random() < 0.5 ? 'up' : 'down';
-    }
-  },
+  }
+});
 
-  changeDirection: function(collision) {
-    var p = this.entity.p;
-    if(p.vx == 0 && p.vy == 0) {
-      if(collision.normalY) {
-        p.direction = Math.random() < 0.5 ? 'left' : 'right';
-      } else if(collision.normalX) {
-        p.direction = Math.random() < 0.5 ? 'up' : 'down';
+
+// Just choosing a random dot for now. May try to come up with something more sophisticated
+function next_dot(map) {
+  var possible_dots = []
+  for(var row = 0; row < 12; row++) {
+    for(var col = 0; col < 12; col++) {
+      if(map[row][col] == 0) {
+        possible_dots.push([row,col])
       }
     }
   }
-});
+
+  var randIndex = Math.floor(Math.random() * possible_dots.length);
+  console.log("Searching for " + possible_dots[randIndex]);
+  return possible_dots[randIndex];
+}

@@ -15,10 +15,9 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 
 angular.module('myApp.controllers', []);
 
 function GameCtrl($scope) {
-
+  
 }
 
-'use strict';
 
 /* Directives */
 
@@ -28,7 +27,6 @@ angular.module('myApp.directives', []).
       elm.text(version);
     };
   }]);
-'use strict';
 
 /* Filters */
 
@@ -38,7 +36,6 @@ angular.module('myApp.filters', []).
       return String(text).replace(/\%VERSION\%/mg, version);
     }
   }]);
-'use strict';
 
 /* Services */
 

@@ -34,7 +34,8 @@ Q.Sprite.extend("Player", {
       type: SPRITE_PLAYER,
       collisionMask: SPRITE_TILES | SPRITE_ENEMY | SPRITE_DOT,
       playing: false, // If ai is playing, set to false, else true
-      switched: false // Whether we just switched from the ai
+      switched: false, // Whether we just switched from the ai
+      vx: default_speed
     });
 
     this.add("2d");
@@ -49,6 +50,7 @@ Q.Sprite.extend("Player", {
 
   },
   step: function(dt) {
+
       // Switch between player control or AI control if needed
       if(this.p.playing && this.p.switched) {
           console.log("Switching to player control...");
@@ -62,6 +64,7 @@ Q.Sprite.extend("Player", {
           this.add("pacmanAI");
           this.p.switched = false;
       }
+      
   }
 });
 
@@ -83,6 +86,9 @@ Q.Sprite.extend("Dot", {
       // the player to stop or change direction
       sensor: true
     });
+    var coord = Q.colAndRow(this.p.x, this.p.y);
+    this.p.col = coord.col;
+    this.p.row = coord.row;
 
     this.on("sensor");
     this.on("inserted");
@@ -91,11 +97,14 @@ Q.Sprite.extend("Dot", {
   // When a dot is hit..
   sensor: function() {
     // Destroy it and keep track of how many dots are left
+    // console.log(Q.colAndRow(this.p.x, this.p.y));
+    Q.currMap[this.p.row][this.p.col] = -1;
     this.destroy();
     this.stage.dotCount--;
     // If there are no more dots left, just restart the game
     if(this.stage.dotCount == 0) {
       Q.stageScene("level1");
+      Q.currMap = jQuery.extend(true, {}, map);
     }
   },
 
@@ -117,9 +126,3 @@ Q.Dot.extend("Tower", {
   }
 });
 
-var tileSize = 70;
-// Return a x and y location from a row and column
-// in our tile map
-Q.tilePos = function(col,row) {
-  return { x: col*tileSize + tileSize/2, y: row*tileSize + tileSize/2 };
-}

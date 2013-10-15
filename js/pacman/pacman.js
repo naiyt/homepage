@@ -1,24 +1,41 @@
+var map =
+[
+[1,1,1,0,0,0,0,0,0,1,1,1],
+[0,0,0,0,1,1,1,1,0,0,0,0],
+[0,1,1,0,0,0,0,0,0,1,1,0],
+[0,0,0,0,1,1,1,1,0,0,0,0],
+[0,1,1,0,1,1,1,1,0,1,1,0],    
+[0,0,0,0,0,0,0,0,0,0,0,0],
+[0,1,1,0,1,1,1,1,0,1,1,0],
+[0,0,0,0,1,1,1,1,0,0,0,0],
+[0,1,1,0,0,0,0,0,0,1,1,0],
+[0,1,1,0,1,1,1,1,0,1,1,0],
+[0,0,0,0,0,0,0,0,0,0,0,0],
+[1,0,1,1,1,0,0,1,1,1,0,1]
+];
+
 var Q = window.Q = Quintus({ development: true })
         .include("Sprites, Scenes, Input, 2D, Anim")
         .setup('pacman',{width: 840, height: 840})
         .controls(true)
 
-
+Q.currMap = jQuery.extend(true, {}, map);
 Q.input.keyboardControls();
 Q.input.joypadControls();
+var tileSize = 70;
 
 
 Q.scene("level1",function(stage) {
   var map = stage.collisionLayer(new Q.PacManMap());
   map.setup();
 
-  player = new Q.Player(Q.tilePos(10,7));
+  player = new Q.Player(Q.tilePos(8,7));
   player.play("eating");
 
   stage.insert(player);
-  stage.insert(new Q.Enemy(Q.tilePos(10,4)));
-  stage.insert(new Q.Enemy(Q.tilePos(15,10)));
-  stage.insert(new Q.Enemy(Q.tilePos(5,10)));
+  //stage.insert(new Q.Enemy(Q.tilePos(10,4)));
+  //stage.insert(new Q.Enemy(Q.tilePos(15,10)));
+  //stage.insert(new Q.Enemy(Q.tilePos(5,10)));
 });
 
 Q.load("sprites.png, sprites.json, level.json, tiles.png, Pacman.png", function() {
@@ -60,3 +77,17 @@ Q.TileLayer.extend("PacManMap",{
   }
 
 });
+
+// Return a x and y location from a row and column
+// in our tile map
+Q.tilePos = function(col,row) {
+  return { x: col*tileSize + tileSize/2, y: row*tileSize + tileSize/2 };
+}
+
+// Given an x and y coordinate, returns it's position on the grid
+Q.colAndRow = function(col,row) {
+  return {
+    col: Math.round((col - tileSize/2)/tileSize),
+    row: Math.round((row - tileSize/2)/tileSize)
+  };
+}
