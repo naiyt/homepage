@@ -14,7 +14,7 @@ Q.Sprite.extend("Enemy", {
       type: SPRITE_ENEMY,
       collisionMask: SPRITE_PLAYER | SPRITE_TILES
     });
-    this.add("2d,enemyControls");
+    this.add("2d,ghostAI");
     this.on("hit.sprite",this,"hit");
   },
 
@@ -64,7 +64,7 @@ Q.Sprite.extend("Player", {
           this.add("pacmanAI");
           this.p.switched = false;
       }
-      
+
   }
 });
 
@@ -73,6 +73,8 @@ Q.Sprite.extend("Player", {
 Q.animations('player', {
    eating: { frames: [0,1], rate: 1/3},
 });
+
+var wins = 0;
 
 
 // Create the Dot sprite
@@ -103,8 +105,16 @@ Q.Sprite.extend("Dot", {
     this.stage.dotCount--;
     // If there are no more dots left, just restart the game
     if(this.stage.dotCount == 0) {
+      wins += 1;
+      win_div = $("#top-left").html("Wins: " + wins);
       Q.stageScene("level1");
-      Q.currMap = jQuery.extend(true, {}, map);
+      //Q.currMap = jQuery.extend(true, {}, initial_map);
+      default_speed *= 1.3;
+
+      if(default_speed > 4000) {
+        default_speed = 300;
+      }
+      console.log("Speed up to " + default_speed);
     }
   },
 

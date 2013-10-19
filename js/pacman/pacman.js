@@ -1,4 +1,4 @@
-var map =
+var initial_map =
 [
 [1,1,1,0,0,0,0,0,0,1,1,1],
 [0,0,0,0,1,1,1,1,0,0,0,0],
@@ -11,7 +11,7 @@ var map =
 [0,1,1,0,0,0,0,0,0,1,1,0],
 [0,1,1,0,1,1,1,1,0,1,1,0],
 [0,0,0,0,0,0,0,0,0,0,0,0],
-[1,0,1,1,1,0,0,1,1,1,0,1]
+[1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
 var Q = window.Q = Quintus({ development: true })
@@ -19,21 +19,21 @@ var Q = window.Q = Quintus({ development: true })
         .setup('pacman',{width: 840, height: 840})
         .controls(true)
 
-Q.currMap = jQuery.extend(true, {}, map);
+Q.currMap = jQuery.extend(true, {}, initial_map);
 Q.input.keyboardControls();
 Q.input.joypadControls();
 var tileSize = 70;
 
-
 Q.scene("level1",function(stage) {
+  Q.currMap = jQuery.extend(true, {}, initial_map);
   var map = stage.collisionLayer(new Q.PacManMap());
   map.setup();
 
-  player = new Q.Player(Q.tilePos(8,7));
+  player = new Q.Player(Q.tilePos(5,0));
   player.play("eating");
 
   stage.insert(player);
-  //stage.insert(new Q.Enemy(Q.tilePos(10,4)));
+  stage.insert(new Q.Enemy(Q.tilePos(1,11)));
   //stage.insert(new Q.Enemy(Q.tilePos(15,10)));
   //stage.insert(new Q.Enemy(Q.tilePos(5,10)));
 });

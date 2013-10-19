@@ -10,7 +10,8 @@ function Cell(x,  y, reachable) {
 
 function AStar(game_map) {
 	this.op = [];
-	this.queue = PriorityQueue({low: true});
+	// this.queue = PriorityQueue();
+	this.queue = [];
 	this.cl = [];
 	this.cells = [];
 	this.gridWidth = 12;
@@ -126,6 +127,12 @@ AStar.prototype.get_heuristic = function(cell) {
 	return 10 * (Math.abs(cell.x - this.end.x) + Math.abs(cell.y - this.end.y));
 }
 
+AStar.prototype.sort = function(a, b) {
+	if(a[0] < b[0]) return 1;
+	if(a[0] > b[1]) return -1;
+	return 0;
+};
+
 AStar.prototype.route = function(start, end) {
 	this.start = this.get_cell(start[0],start[1]);
 	this.end = this.get_cell(end[0],end[1]);
@@ -133,7 +140,7 @@ AStar.prototype.route = function(start, end) {
 	this.queue.push([this.start.f, this.start]);
 
 	var found = false;
-	while(this.queue.size() > 0) {
+	while(this.queue.length > 0) {
 		var next_cell = this.queue.pop();
 		
 		var f = next_cell[0];
@@ -150,8 +157,9 @@ AStar.prototype.route = function(start, end) {
 
 		for(var c in adj_cells) {
 			c = adj_cells[c];
-			if(c.reachable && this.cl.indexOf(c) == -1) {	
-				if(this.op.indexOf([c.f, c]) != -1) {
+			if(c.reachable && this.cl.indexOf(c) == -1) {
+				//if(this.queue.includes([c.f, c])) {
+				if(this.queue.indexOf([c.f, c]) != -1) {
 					if(c.g > cell.g + 10) {
 						this.update_cell(c, cell);
 					}
@@ -159,6 +167,7 @@ AStar.prototype.route = function(start, end) {
 				else {
 					this.update_cell(c, cell);
 					this.queue.push([c.f, c]);
+					this.queue.sort(this.sort);
 				}
 			
 			}
