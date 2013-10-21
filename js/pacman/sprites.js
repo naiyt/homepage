@@ -22,6 +22,15 @@ Q.Sprite.extend("Enemy", {
     if(col.obj.isA("Player")) {
       Q.stageScene("level1");
     }
+  },
+
+  set_ai: function(ai) {
+    if(ai == 0) {
+      this.add("smartGhost");
+    }
+    else {
+      this.add("dumbGhost");
+    }
   }
 });
 
@@ -125,14 +134,3 @@ Q.Sprite.extend("Dot", {
     this.stage.dotCount++;
   }
 });
-
-
-// TODO: Implement
-Q.Dot.extend("Tower", {
-  init: function(p) {
-    this._super(Q._defaults(p,{
-      sheet: 'pacman'
-    }));
-  }
-});
-

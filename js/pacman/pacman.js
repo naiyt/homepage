@@ -33,8 +33,10 @@ Q.scene("level1",function(stage) {
   player.play("eating");
 
   stage.insert(player);
-  stage.insert(new Q.Enemy(Q.tilePos(1,11)));
-  //stage.insert(new Q.Enemy(Q.tilePos(15,10)));
+  var ghost1 = stage.insert(new Q.Enemy(Q.tilePos(1,11)));
+  var ghost2 = stage.insert(new Q.Enemy(Q.tilePos(5,10)));
+  ghost1.set_ai(0);
+  ghost2.set_ai(1);
   //stage.insert(new Q.Enemy(Q.tilePos(5,10)));
 });
 
@@ -78,16 +80,3 @@ Q.TileLayer.extend("PacManMap",{
 
 });
 
-// Return a x and y location from a row and column
-// in our tile map
-Q.tilePos = function(col,row) {
-  return { x: col*tileSize + tileSize/2, y: row*tileSize + tileSize/2 };
-}
-
-// Given an x and y coordinate, returns it's position on the grid
-Q.colAndRow = function(col,row) {
-  return {
-    col: Math.round((col - tileSize/2)/tileSize),
-    row: Math.round((row - tileSize/2)/tileSize)
-  };
-}
