@@ -8,7 +8,7 @@ function Cell(x,  y, reachable) {
 	this.f = 0;
 }
 
-function AStar(game_map) {
+function AStar(game_map, type) {
 	this.op = [];
 	// this.queue = PriorityQueue();
 	this.queue = [];
@@ -17,6 +17,7 @@ function AStar(game_map) {
 	this.gridWidth = 12;
 	this.gridHeight = 12
 	this.game_map = game_map;
+	this.type = type;
 }
 
 AStar.prototype.init_grid = function() {
@@ -25,6 +26,14 @@ AStar.prototype.init_grid = function() {
 		for(var col = 0; col < this.gridWidth; col++) {
 			if(this.game_map[row][col] == 1) {
 				reachable = false;
+			}
+			else if(this.type == "pacman") {
+				if(this.ghost_in_tile(row,col)) {
+					reachable = false;
+				}
+				else {
+					reachable = true;
+				}
 			}
 			else {
 				reachable = true;
@@ -35,8 +44,10 @@ AStar.prototype.init_grid = function() {
 	}
 }
 
-
-
+AStar.prototype.ghost_in_tile = function(row, col) {
+	var tile_pos = Q.tilePos(col, row);
+	return Q.stage().locate(tile_pos.x, tile_pos.y, SPRITE_ENEMY);
+};
 
 AStar.prototype.get_cell = function(x, y) {
 	return this.cells[x * this.gridHeight + y];
@@ -180,8 +191,8 @@ AStar.prototype.route = function(start, end) {
 };
 
 
-function pathfind(start, end, map) {
-	my_star = new AStar(map);
+function pathfind(start, end, map, type) {
+	my_star = new AStar(map, type);
 	my_star.init_grid();
 	return my_star.route(start, end);
 }

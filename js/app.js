@@ -3,12 +3,19 @@
 // Declare app level module which depends on filters, and services
 angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'myApp.controllers', 'ui.bootstrap']).
   config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: 'MyCtrl1'});
-    $routeProvider.when('/', {templateUrl: 'partials/main-pac.html', controller: 'GameCtrl'});
-    $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
-    $routeProvider.otherwise({redirectTo: '/view1.html'});
+    $routeProvider.when('/', {templateUrl: 'partials/no-pac.html', controller: 'GameCtrl'});
+    $routeProvider.when('/trellorss', {templateUrl: 'partials/trellorss.html', controller: 'GameCtrl'});
+    $routeProvider.when('/steamapi', {templateUrl: 'partials/steamapi.html', controller: 'GameCtrl'});
+    $routeProvider.when('/udacity-blog', {templateUrl: 'partials/udacityblog.html', controller: 'GameCtrl'});
+    $routeProvider.when('/udacity-wiki', {templateUrl: 'partials/udacitywiki.html', controller: 'GameCtrl'});
+    $routeProvider.when('/steamplaytime', {templateUrl: 'partials/steamplaytime.html', controller: 'GameCtrl'});
+    $routeProvider.when('/oss', {templateUrl: 'partials/oss.html', controller: 'GameCtrl'});
+    $routeProvider.when('/udacity-searchengine', {templateUrl: 'partials/udacitysearchengine.html', controller: 'GameCtrl'});
+    $routeProvider.when('/tech', {templateUrl: 'partials/tech.html', controller: 'GameCtrl'});
+    $routeProvider.when('/resume', {templateUrl: 'partials/resume.html', controller: 'GameCtrl'});
+    $routeProvider.when('/games', {templateUrl: 'partials/games.html', controller: 'GameCtrl'});
+    $routeProvider.otherwise({redirectTo: '/'});
   }]);
-'use strict';
 
 /* Controllers */
 
@@ -17,7 +24,6 @@ angular.module('myApp.controllers', []);
 function GameCtrl($scope) {
   
 }
-
 
 /* Directives */
 
@@ -34,7 +40,7 @@ angular.module('myApp.filters', []).
   filter('interpolate', ['version', function(version) {
     return function(text) {
       return String(text).replace(/\%VERSION\%/mg, version);
-    }
+    };
   }]);
 
 /* Services */

@@ -5,6 +5,11 @@ var SPRITE_DOT = 8;
 
 Q.gravityX = 0;
 Q.gravityY = 0;
+Q.deaths = 0;
+Q.wins = 0;
+
+//var totalFrames = 0;
+//var totalTime = 0;
 
 Q.Sprite.extend("Enemy", {
   init: function(p) {
@@ -20,6 +25,8 @@ Q.Sprite.extend("Enemy", {
 
   hit: function(col) {
     if(col.obj.isA("Player")) {
+      Q.deaths += 1;
+      $('#deaths').html(Q.deaths);
       Q.stageScene("level1");
     }
   },
@@ -60,15 +67,19 @@ Q.Sprite.extend("Player", {
   },
   step: function(dt) {
 
+      //totalTime += dt;
+      //totalFrames += 1;
+      //$('#fps').text("FPS: " + Math.round(totalFrames/totalTime) + " MS: " + Math.round(totalFrames/totalTime));
+
       // Switch between player control or AI control if needed
       if(this.p.playing && this.p.switched) {
-          console.log("Switching to player control...");
+          $('#player').text('You!');
           this.del("pacmanAI");
           this.add("pacManControls");
           this.p.switched = false;
       }
       else if(this.p.switched) {
-          console.log("Switching to AI control...");            
+          $('#player').text('AI');
           this.del("pacManControls");
           this.add("pacmanAI");
           this.p.switched = false;
@@ -83,7 +94,6 @@ Q.animations('player', {
    eating: { frames: [0,1], rate: 1/3},
 });
 
-var wins = 0;
 
 
 // Create the Dot sprite
@@ -95,7 +105,7 @@ Q.Sprite.extend("Dot", {
       // Set sensor to true so that it gets notified when it's
       // hit, but doesn't trigger collisions itself that cause
       // the player to stop or change direction
-      sensor: true
+      sensor: true,
     });
     var coord = Q.colAndRow(this.p.x, this.p.y);
     this.p.col = coord.col;
@@ -114,13 +124,14 @@ Q.Sprite.extend("Dot", {
     this.stage.dotCount--;
     // If there are no more dots left, just restart the game
     if(this.stage.dotCount == 0) {
-      wins += 1;
-      win_div = $("#top-left").html("Wins: " + wins);
+      Q.wins += 1;
+      $('#wins').html(Q.wins);
+
       Q.stageScene("level1");
       //Q.currMap = jQuery.extend(true, {}, initial_map);
       default_speed *= 1.3;
 
-      if(default_speed > 4000) {
+      if(default_speed > 2000) {
         default_speed = 300;
       }
       console.log("Speed up to " + default_speed);
