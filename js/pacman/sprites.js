@@ -8,9 +8,10 @@ Q.gravityY = 0;
 Q.deaths = 0;
 Q.wins = 0;
 
-//var totalFrames = 0;
+//var totalFrames = 0; 
 //var totalTime = 0;
 
+// Ghosts!
 Q.Sprite.extend("Enemy", {
   init: function(p) {
 
@@ -32,7 +33,7 @@ Q.Sprite.extend("Enemy", {
   },
 
   set_ai: function(ai) {
-    if(ai == 0) {
+    if(ai === 0) {
       this.add("smartGhost");
     }
     else {
@@ -51,7 +52,7 @@ Q.Sprite.extend("Player", {
       collisionMask: SPRITE_TILES | SPRITE_ENEMY | SPRITE_DOT,
       playing: false, // If ai is playing, set to false, else true
       switched: false, // Whether we just switched from the ai
-      vx: default_speed
+      vx: Q.default_speed
     });
 
     this.add("2d");
@@ -67,6 +68,7 @@ Q.Sprite.extend("Player", {
   },
   step: function(dt) {
 
+      // Uncomment if you want to keep track of FPS
       //totalTime += dt;
       //totalFrames += 1;
       //$('#fps').text("FPS: " + Math.round(totalFrames/totalTime) + " MS: " + Math.round(totalFrames/totalTime));
@@ -95,16 +97,13 @@ Q.animations('player', {
 });
 
 
-
 // Create the Dot sprite
+// Mmmmm...dots....
 Q.Sprite.extend("Dot", {
   init: function(p) {
     this._super(p,{
       sheet: 'dot',
       type: SPRITE_DOT,
-      // Set sensor to true so that it gets notified when it's
-      // hit, but doesn't trigger collisions itself that cause
-      // the player to stop or change direction
       sensor: true,
     });
     var coord = Q.colAndRow(this.p.x, this.p.y);
@@ -115,33 +114,29 @@ Q.Sprite.extend("Dot", {
     this.on("inserted");
   },
 
-  // When a dot is hit..
   sensor: function() {
-    // Destroy it and keep track of how many dots are left
-    // console.log(Q.colAndRow(this.p.x, this.p.y));
     Q.currMap[this.p.row][this.p.col] = -1;
     this.destroy();
     this.stage.dotCount--;
     // If there are no more dots left, just restart the game
-    if(this.stage.dotCount == 0) {
+    if(this.stage.dotCount === 0) {
+      // TODO - Extract winning processing to separate method
+      //          (it's dumb to have it here)
       Q.wins += 1;
       $('#wins').html(Q.wins);
-
       Q.stageScene("level1");
-      //Q.currMap = jQuery.extend(true, {}, initial_map);
-      default_speed *= 1.3;
+      Q.default_speed *= 1.3;
 
-      if(default_speed > 2000) {
-        default_speed = 300;
+      if(Q.default_speed > Q.max_speed) {
+        Q.default_speed = 300;
       }
-      console.log("Speed up to " + default_speed);
     }
   },
 
   // When a dot is inserted, use it's parent (the stage)
   // to keep track of the total number of dots on the stage
   inserted: function() {
-    this.stage.dotCount = this.stage.dotCount || 0
+    this.stage.dotCount = this.stage.dotCount || 0;
     this.stage.dotCount++;
   }
 });

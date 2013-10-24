@@ -4,7 +4,7 @@ var initial_map =
 [0,0,0,0,1,1,1,1,0,0,0,0],
 [0,1,1,0,0,0,0,0,0,1,1,0],
 [0,0,0,0,1,1,1,1,0,0,0,0],
-[0,1,1,0,1,1,1,1,0,1,1,0],    
+[0,1,1,0,1,1,1,1,0,1,1,0],
 [0,1,1,0,0,0,0,0,0,1,1,0],
 [0,0,0,0,1,1,1,1,0,0,0,0],
 [0,1,1,0,1,1,1,1,0,1,1,0],
@@ -17,11 +17,13 @@ var initial_map =
 var Q = window.Q = Quintus({ development: true })
         .include("Sprites, Scenes, Input, 2D, Anim")
         .setup('pacman',{width: 840, height: 840})
-        .controls(true)
+        .controls(true);
 
 Q.currMap = jQuery.extend(true, {}, initial_map);
 Q.input.keyboardControls();
 Q.input.joypadControls();
+Q.default_speed = 300;
+Q.max_speed = 2000;
 var tileSize = 70;
 
 Q.scene("level1",function(stage) {
@@ -33,11 +35,12 @@ Q.scene("level1",function(stage) {
   player.play("eating");
 
   stage.insert(player);
-  var ghost1 = stage.insert(new Q.Enemy(Q.tilePos(1,11)));
-  var ghost2 = stage.insert(new Q.Enemy(Q.tilePos(5,10)));
-  ghost1.set_ai(0);
-  ghost2.set_ai(1);
-  //stage.insert(new Q.Enemy(Q.tilePos(5,10)));
+  var ghost1 = stage.insert(new Q.Enemy(Q.tilePos(1,10)));
+  var ghost2 = stage.insert(new Q.Enemy(Q.tilePos(10,10)));
+  var ghost3 = stage.insert(new Q.Enemy(Q.tilePos(7,5)));
+  ghost1.set_ai(0); // Smart AI! Actually pathfinds
+  ghost2.set_ai(1); // Dumb AI! Just moves randomly
+  ghost3.set_ai(1);
 });
 
 Q.load("sprites.png, sprites.json, level.json, tiles.png, Pacman.png", function() {
@@ -69,8 +72,8 @@ Q.TileLayer.extend("PacManMap",{
       for(var x =0;x<row.length;x++) {
         var tile = row[x];
         
-        if(tile == 0 || tile == 2) {
-          var className = tile == 0 ? 'Dot' : 'Tower'
+        if(tile === 0 || tile === 2) {
+          var className = tile === 0 ? 'Dot' : 'Tower';
           this.stage.insert(new Q[className](Q.tilePos(x,y)));
           row[x] = 0;
         }
