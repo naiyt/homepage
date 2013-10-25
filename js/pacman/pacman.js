@@ -37,10 +37,10 @@ Q.scene("level1",function(stage) {
   stage.insert(player);
   var ghost1 = stage.insert(new Q.Enemy(Q.tilePos(1,10)));
   var ghost2 = stage.insert(new Q.Enemy(Q.tilePos(10,10)));
-  var ghost3 = stage.insert(new Q.Enemy(Q.tilePos(7,5)));
+  //var ghost3 = stage.insert(new Q.Enemy(Q.tilePos(7,5)));
   ghost1.set_ai(0); // Smart AI! Actually pathfinds
-  ghost2.set_ai(1); // Dumb AI! Just moves randomly
-  ghost3.set_ai(1);
+  ghost2.set_ai(0); // Dumb AI! Just moves randomly
+  //ghost3.set_ai(1);
 });
 
 Q.load("sprites.png, sprites.json, level.json, tiles.png, Pacman.png", function() {

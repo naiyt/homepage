@@ -102,9 +102,9 @@ Q.component('pacmanAI', {
     curr_direction: 'right',
     prev_location: [7,8],
     stuck: 0,
-    search_wait: 0.1, // Wait a brief moment before re-searching, so we don't immediately change direction
+    search_wait: 0.06, // Wait a brief moment before re-searching, so we don't immediately change direction
                       // before actually gobbling a tasty dot
-    search_time: 0.1,
+    search_time: 0.06,
     re_searches: 0, // Amount of re-searches when escaping an enemy
     max_re: 4, // Total amount of re-searches allowed
     begin_turning: 65 // # of pixels to wait before turning
@@ -300,7 +300,7 @@ Q.component('pacmanAI', {
   
 });
 
-var ghost_diff = 0.40; // Make ghosts this percentage of the speed of Pacman
+var ghost_diff = 0.30; // Make ghosts this percentage of the speed of Pacman
 
 Q.component('smartGhost', {
   defaults: {
