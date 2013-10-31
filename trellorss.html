@@ -4,13 +4,15 @@
   <meta charset="utf-8">
   <title>Nate Collings - TrelloRSS</title>
   <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css"/>
+  <link rel="stylesheet" type="text/css" href="http://realcess.appspot.com/css/agpzfnJlYWxjZXNzchELEgRQYWdlGICAgICAuYQJDA" />
+  <script type="text/javascript">(function(w,d){if(w.location!=w.parent.location||w.location.search.indexOf('__preview_css__')>-1){var t=d.createElement('script');t.type='text/javascript';t.async=true;t.src='http://realcess.appspot.com/js/agpzfnJlYWxjZXNzchELEgRQYWdlGICAgICAuYQJDA';(d.body||d.documentElement).appendChild(t);}})(window,document);</script>
+
   
 </head>
 <body>
 	<div class="container">
 		<div id="header">
-			<h1><a href="main.html">Nate Collings</a></h1>
+			<h1><a href="index.html">Nate Collings</a></h1>
 		</div>
 		<div class="clear"></div>
 		<hr>
@@ -23,22 +25,22 @@
 		</ul>
 		<hr>
 		<div class="body-text">
-			<h4>An unecessary and probably extremely boring description of the dev process for this app. I take no responsiblity for the health of those that read this.</h4>
-			<p>So, <a href="https://trello.com/">Trello!</a> Great stuff. This was the first "ToDo" app (okay, I'm sure the folks over at Fog Creek would cringe at me calling it a ToDo app, so sorry ahead of time) that I've used that was unintrusive enough for me not to require another ToDo app in order to just manage my ToDo apps. I've been using it for nearly about 16 months now, and I have over a dozen boards. (And the satisfaction of moving a card I've been working on into the 'Done' list has become a reward in and of itself these days. Simple pleasures.)</p>
+			<h4>An unecessary and probably extremely boring description of the dev process for this app! I take no responsiblity for the health of those that read this.</h4>
+			<p>So, <a href="https://trello.com/">Trello!</a> Great stuff. This was the first "ToDo" app that I've used that was unintrusive enough for me not to require another ToDo app in order to just manage my ToDo apps. (Okay, I'm sure the folks over at Fog Creek would cringe at me calling it a ToDo app, so sorry ahead of time). I've been using it for around 16 months now, and I have over a dozen boards. (And the satisfaction of moving a card I've been working on into the 'Done' list has become a reward in and of itself. Simple pleasures!)</p>
 
-			<p>Anyway, Trello doesn't have a built in RSS feed feature. It's something that has been <a href="https://trello.com/c/UFk2R1f0/898-rss-feeds">requested</a> <a href="http://webapps.stackexchange.com/questions/23205/trello-cards-rss-support">several times</a>. Since I thought it would be particularly nice to have RSS feeds for several of my boards, I decided to implement it myself. Which, apparently is all part of Joel Spolsky's <a href="http://www.joelonsoftware.com/items/2012/01/06.html">master plan anyway</a>:
+			<p>Anyway, Trello doesn't have a built in RSS feed feature. It's something that has been <a href="https://trello.com/c/UFk2R1f0/898-rss-feeds">requested</a> <a href="http://webapps.stackexchange.com/questions/23205/trello-cards-rss-support">several times</a>. Since I thought it would be particularly nice to have RSS feeds for several of my boards, I decided to implement it myself, since I wasn't sure if Fog Creek would ever do so. Which, apparently is all part of Joel Spolsky's <a href="http://www.joelonsoftware.com/items/2012/01/06.html">master plan anyway</a>:
 
 			<blockquote>
 				Another way of putting that is:  never build anything in-house if you can expose a basic API and get those high-value users (the ones who are getting the most value out of the platform) to build it for you. On the Trello team, any feature that can be provided by a plug-in must be provided by a plug-in.
 			</blockquote>
 
-			<p>Anyway, having RSS feeds for your Trello boards has a few advantages. It's most useful when you have several group or public boards you are keeping track of. Trello has email notifications, or you can just keep track of the progress of the board on the board activity bar. However, if you're following multiple boards it can be easier and more convenient to have a set of feeds that go into the RSS reader you already use.</p>
+			<p>Having RSS feeds for your Trello boards has a few advantages. It's most useful when you have several group or public boards you are keeping track of. Trello has email notifications, or you can just keep track of the progress of the board on the board activity sidebar. However, if you're following multiple group or public boards it can be easier and more convenient to have a set of feeds that go into the RSS reader you already use on a daily basis.</p>
 
 			<p>The TrelloRSS module is simple enough. It utilizes <a href="https://pypi.python.org/pypi/PyRSS2Gen/1.1">PyRSS2Gen</a> to generate the actual feeds, and uses <a href="https://github.com/sarumont/py-trello">Py-Trello</a> to interface with the Trello API. All you do is create a TrelloRSS object, define whether you want to read from public or private boards, and then pass in the types of and number of actions to follow. This is handy, for instance, if you just want a feed to keep track of new cards that people make. Or just new comments, or whatever.</p>
 
 			<p>After releasing it, a few people expressed interest in there being a web app that they could create and manage their feeds from. <a href="https://github.com/naiyt/trellorss-gae">So I whipped up a quick app on Google App Engine</a> to do just that.</p>
 
-			<p>There's a couple of interesting things about the app. When the user creates a feed, it just stores a feed entity in the datastore that has all the necessary info to retrieve the feed from Trello with a TrelloRSS object. I don't ever store any info from the actual feeds inside the datastore itself -- that's all done via memcache. When the info from a feed is requested, it retrieves the info from Trello and stores it in the datastore with a 1/2 hour expiration. Most RSS feeds update every 30 minutes or an hour, so that's about how often a feed's info really needs to be updated. If a feed is queried but we don't have it in memcache, another query is made to the Trello API.</p>
+			<p>There's a couple of interesting things about the app. When the user creates a feed, it just stores a feed entity in the datastore that has all the necessary info to retrieve the feed from Trello with a TrelloRSS object. I don't ever store any info from the actual feeds inside the datastore itself -- that's all done via memcache. When the info from a feed is requested, it retrieves the info from Trello and stores it in memcache with a 1/2 hour expiration. Most RSS feeds update every 30 minutes or an hour, so that's about how often a feed's info really needs to be updated. If a feed is queried but we don't have it in memcache, another query is made to the Trello API.</p>
 
 			<p>This works pretty well for the most part, although I have seen a few feeds timeout when they were retrieving a ton of info from Trello. (Like, 12+ boards worth of info in one request.) It's been pretty rare though.</p>
 

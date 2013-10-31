@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title>Nate Collings</title>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css"/>
+
+</head>
+<body>
+  <!-- 
+       Oh hi there, person viewing the source! I realize that my method of manually setting
+       all of the divs and positions is not the best way to do this. Were I to do it again,
+       I would create CSS classes for types of divs, and then just have the same JSON object that I use for my Quintus map determine which classes of divs went where. Because right now it's a HUGE pain to make any changes to the layout of the map!
+   -->
+
+  <div id='outer' ng-controller>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <!--<script src="js/app.js"></script>-->
+        <script src='http://cdn.html5quintus.com/v0.1.6/quintus-all.js'></script>
+        <script src='js/pacman/pacman.js'></script>
+        <script src='js/pacman/sprites.js'></script>
+        <script src='js/pacman/components.js'></script>
+        <script src='js/pacman/ai.js'></script>
+
+        <div class="container-non-responsive">
+            <canvas id="pacman"></canvas>
+            <div class="box" id="top-left">
+                <p><strong>Wins:</strong><span id="wins"> 0</span></p><p><strong>Deaths:</strong> <span id="deaths">0</span></p>
+            </div>
+            <div class="box" id="top-right">
+                <a href="index.html" class="btn btn-xs btn-default nounder">Yes, I realize Pacman is<br>incredibly distracting!<br>Click here to turn it off.</a>
+            </div>
+            <div class="box underline" id="name">
+                <h1>Nate Collings</h1>
+            </div>
+            <div class="box" id="resume">
+                <h3><a href="resume.html">Resume</a>
+            </div>
+            <div class="box" id="contact">
+                nate@natecollings.com<br><br><a href="https://twitter.com/NateCollings">@NateCollings</a>
+            </div>
+            <div class="box" id="aboutme">
+                <h4 class="underline">About Me</h4>
+                <span class="small-txt">My name is Nate, and I have a website! I'm a programmer currently studying computer science at <a href="http://usu.edu">USU</a>. Take a look at the links around this page to see some of my projects.</span>
+            </div>
+            <div class="box" id="port1">
+                <a href="trellorss.html">TrelloRSS</a><br><span class="small-txt">Open Source RSS Feed generator for <a href="http://trello.com">Trello</a>; web app for hosting and generating Trello feeds</span>
+            </div>
+            <div class="box" id="port2">
+                <a href="steamapi.html">Steam API Wrapper</a><br><span class="small-txt">Handy wrapper around the <a href="http://steamcommunity.com/dev">Steam Web API</a>.</span>
+            </div>
+            <div class="box" id="port3">
+                <a href="udacity.html">Basic Blog Software</a><br><span class="small-txt">Very basic! Made in CS235 at <a href="https://www.udacity.com/course/cs253">Udacity</a>.</span>
+            </div>
+            <div class="box" id="port4">
+                <a href="udacity.html">Basic Wiki Software</a><br><span class="small-txt">Very basic! Made in CS235 at <a href="https://www.udacity.com/course/cs253">Udacity</a>.
+            </div>
+            <div class="box" id="port5">
+                <a href="games.html">Games</a><br><span class="small-txt">Just some silly games I've made.</span></div>
+            <div class="box" id="port6">
+                <a href="steamplaytime.html">Steamplaytime</a><br><span class="small-txt">Popular webapp for your calculating and managing your <a href="http://steampowered.com">Steam</a> backlog. Approx. 20,000 unique users.
+            </div>
+            <div class="box" id="oss">
+                <a href="oss.html">Open Source Contributions</a><br>
+                <span class="small-txt">I've contributed a bit to a few open source projects, including Py-Trello and Saltstack.</span>
+            </div>
+            <div class="box" id="howto">
+                <h3 class="underline">How to Play!</h3>Click somewhere in the maze, and use the direction keys to start playing. Press <em>Spacebar</em> to give control back to the AI.<br>Current player: <span id="player"><strong>AI</strong></span>
+            </div>
+            <div class="box" id="search">
+                <a href="udacity.html">Basic Search Engine</a><br>
+                <span class="small-txt">Very basic! Made in CS235 at <a href="https://www.udacity.com/course/cs253">Udacity</a>.
+            </div>
+            <div class="box" id="tech">
+                <a href="tech.html">Tech</a><br>
+                <span class="small-txt">For a quick look at the languages, tools, and environments I know.</span>
+            </div>
+            <div class="box" id="spacer1"></div>
+            <div class="box" id="spacer2"></div>
+        </div>
+  </div>
+</body>
+</html>
