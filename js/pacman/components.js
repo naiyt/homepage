@@ -88,6 +88,8 @@ Q.component("pacManControls", {
       case "up":   p.vy = -p.speed; break;
       case "down": p.vy = p.speed; break;
     }
+
+    p.prev_location = p.location; // For consistency with the pacmanAI
    }
 
 });
