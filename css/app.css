@@ -231,3 +231,15 @@ position: absolute;
 .projects {
 
 }
+
+.right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+
+.center {
+  text-align: center;
+}
