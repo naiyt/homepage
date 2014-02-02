@@ -32,7 +32,7 @@
 
 		<p>Pacman and the ghosts have some basic pathfinding AI using an A* pathfinding algorithm. <a href="http://www.laurentluce.com/posts/solving-mazes-using-python-simple-recursivity-and-a-search/">I followed this tutorial for implementing A* in Python</a>, and then just translated it to Javascript, which was pretty easy. It's efficient except for the fact that I'm manually sorting the elements rather then using a priority queue...it doesn't seem to make a huge performance difference as there are few elements to sort (and a new path is only calculated once every few seconds or so), but ideally I would refactor it to use a priority queue instead.</p>
 
-		<p>Currently, Pacman just picks a random dot plot a path towards. To make him more efficient I would want to implement a nearest neighbor search to have him go after near dots first. This is why the Pacman AI can seem pretty erratic at times.</p>
+		<p>Currently, Pacman just picks a random dot to plot a path towards. To make him more efficient I would want to implement a nearest neighbor search to have him go after near dots first. This is why the Pacman AI can seem pretty erratic at times.</p>
 
 		<p>The ghosts also use the same A* algo to chase after Pacman. The only difference is that when Pacman is using it, ghosts are considered "unreachable" elements on the map, so he doesn't plot a path through them. At every game loop, Pacman also checks two tiles in front of him (and tries to look around corners, but that seems kind of broken), and if there's a ghost he calculates a new path in the opposite direction.</p>
 

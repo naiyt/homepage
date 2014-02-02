@@ -24,7 +24,7 @@
 			<li><a href="https://github.com/naiyt/steamplaytime">Steamplaytime source</a></li>
 		</ul>
 		<hr>
-		<p>Here's an app that was particularly fun to make (and ended up being a lot more popular then I would have ever expected).</p>
+		<p>Here's an app that was particularly fun to make (and ended up being a lot more popular then I expected).</p>
 
 		<h3>The Idea</h3>
 		<hr>
@@ -40,7 +40,7 @@
 	
 		</p>
 
-		<p>I had already messed around with the Steam Web API on creating a seperate Steam related app that never panned out (or at least hasn't panned out yet). So I had the idea pop into my head on a Friday afternoon, and spent the weekend hacking it together real quick.</p>
+		<p>I had already messed around with the Steam Web API on creating a seperate Steam related app that never panned out (or at least hasn't panned out yet). So I had the idea pop into my head on a Friday afternoon, and spent the weekend hacking it together.</p>
 
 		<h3>Scaling</h3>
 		<hr>
@@ -55,7 +55,7 @@
 
 		<p>...well, that's somewhat of a lie. I certainly had to worry about the <em>price!</em>. Running a high traffic app on GAE can cost you quite a bit. Especially if your app's datastore queries are not optimized and properly cached, and if your code is inefficient (leading to more instance hours required). I kept watching my allocated instance hours creep up to their limit, and my datastore queries jump higher and higher throughout the day. I didn't really have a lot of money to pour into the app, so I kept bumping up my max daily limit hoping that I wouldn't go over.</p>
 
-		<p>Luckily, the majority of the traffic was just on the first couple of days. It cost around $15 to run it for the first three days. Since then, I've optimized a lot of things, and it only gets about a hundred or so hits on average a day now, so it barely costs me anything anymore.</p>
+		<p>Luckily, the majority of the traffic was just in the first couple of days. It cost around $15 to run it for the first three days. Since then, I've optimized a lot of things, and it only gets about a hundred or so hits on average a day now, so it barely costs me anything anymore.</p>
 
 		<p>Speaking of caching, <a href="https://developers.google.com/appengine/docs/python/ndb/">NDB is pretty awesome</a>. If anybody is still using GAE's old db API, they should switch to NDB as soon as possible. NDB automatically caches EVERY datastore entity in memcache. You don't have to worry about manually caching any of your datastore queries, which is incredidbly helpful. It certainly made my code shorter and more bug free, and the performance benefits are fantastic. I get about an 83% memcache hit rate, without any effort on my part.</p>
 
@@ -80,8 +80,7 @@
 
 		<p>Pretty much everything was initially done server side. However, I recently added the ability for users to sign in with their Steam accounts and manully manage their games. This is done with <a href="http://jqueryui.com/sortable/">ui-sortable</a>, which works fine for the most part.</p>
 
-		<p>Since users can now manually manage what games they have and haven't beaten (by placing them in their "beaten" categories), I'm slowly getting a large amount of data in terms of the actual hours people are taking to complete games. Pretty soon I should be able to use that to improve the playtime estimates that I store, letting me rely on HLTB's numbers less and less. I seem to be getting about 20 or so new "registered" users per week (and around 100-200 new unique id's queried), so give it another month or so and I should have enough data to really start making some better estimates.</p>
-		
+		<p>I'm not super proud of the quality of the code, as it was put together fairly quickly on a weekend. When I have more time I'll likely refactor a lot of the code (especially since there's a few reamining bus).</p>
 	</div>
 </body>
 </html>
