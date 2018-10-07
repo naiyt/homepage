@@ -1,5 +1,6 @@
-/* app css stylesheet */
-
+html, body {
+  font-family: "Arial";
+}
 
 .menu {
   list-style: none;
@@ -89,7 +90,7 @@ position: absolute;
 
 #name {
     width: 280px;
-    height: 70px; 
+    height: 70px;
     left: 280px;
     top: 70px;
 }
@@ -217,7 +218,7 @@ position: absolute;
   padding-top: 15px;
 }
 
-.clear { 
+.clear {
   clear: both;
 }
 
